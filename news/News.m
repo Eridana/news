@@ -7,7 +7,13 @@
 //
 
 #import "News.h"
+#import "City.h"
 
 @implementation News
+
+-(void)setCity:(NSString *)city
+{
+    _city = [City getNameById:city];
+}
 
 @end

@@ -14,25 +14,25 @@
 
 @implementation NewsDetailViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+-(void) setDetails:(News *)details
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    _details = details;
+    [self updateDetails];
 }
 
-- (void)viewDidLoad
+-(void)updateDetails
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    [self.detailTitle setText:_details.title];
+    [self.summary setText:_details.summary];
+    [self.dateLabel setText:_details.published_at];
+    [self.linkLabel setText:_details.rbcitynews_url];
+    [self.cityLabel setText:_details.city];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+    [super viewWillAppear:animated];
+    [self updateDetails];
+  }
 
 @end

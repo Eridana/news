@@ -33,6 +33,9 @@
             if ([city respondsToSelector:NSSelectorFromString(key)]) {
                 [city setValue:[cityDic valueForKey:key] forKey:key];
             }
+            if([key isEqualToString:@"id"]) {
+                [city setValue:[cityDic valueForKey:key] forKey:@"city_id"];
+            }
         }
         
         [cities addObject:city];

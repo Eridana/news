@@ -10,10 +10,9 @@
 
 @interface DetailCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *summaryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *cityLabel;
+@property (weak, nonatomic) IBOutlet UITextView *titleTextView;
 
 
 @end

@@ -13,7 +13,7 @@
 #import "Manager.h"
 #import "Communicator.h"
 
-@interface ViewController () <ManagerDelegate> {
+@interface ViewController () <ManagerDelegate, UITableViewDataSource,UITableViewDelegate> {
     Manager *_manager;
     NSArray *_cities;
     NSArray *_news;
@@ -25,6 +25,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.view addSubview:_tableView];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
     _manager = [[Manager alloc] init];
     _manager.communicator = [[Communicator alloc] init];
     _manager.communicator.delegate = _manager;
@@ -34,6 +38,21 @@
     [_manager fetchNews];
 }
 
+#pragma mark - Segue
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([sender isKindOfClass:[UITableViewCell class]]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        if (indexPath) {
+            if ([segue.identifier isEqualToString:@"showDetails"]) {
+                if ([segue.destinationViewController respondsToSelector:@selector(setDetails:)]) {
+                    id cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                    [segue.destinationViewController performSelector:@selector(setDetails:) withObject:_news[indexPath.row]];
+                }
+            }
+        }
+    }
+}
 
 #pragma mark - ManagerDelegate
 - (void)didReceiveCities:(NSArray *)cities
@@ -48,12 +67,10 @@
     [self.tableView reloadData];
 }
 
-
 - (void)fetchingFailedWithError:(NSError *)error
 {
     NSLog(@"Error %@; %@", error, [error localizedDescription]);
 }
-
 
 #pragma mark - Table View
 
@@ -67,14 +84,11 @@
     DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     News *new = _news[indexPath.row];
-    [cell.titleLabel setText:new.title];
-    [cell.summaryLabel setText:new.summary];
+    [cell.titleTextView setText:new.title];
     [cell.dateLabel setText:new.published_at];
     [cell.cityLabel setText:new.city];
     
     return cell;
 }
-     
-
 
 @end
