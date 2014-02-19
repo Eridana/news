@@ -24,7 +24,7 @@
     
     NSMutableArray *cities = [[NSMutableArray alloc] init];
     
-    NSArray *results = [parsedObject valueForKey:@"results"];
+    NSArray *results = [parsedObject valueForKey:@"cities"];
     
     for (NSDictionary *cityDic in results) {
         City *city = [[City alloc] init];
@@ -54,7 +54,7 @@
     
     NSMutableArray *news = [[NSMutableArray alloc] init];
     
-    NSArray *results = [parsedObject valueForKey:@"results"];
+    NSArray *results = [parsedObject valueForKey:@"news"];
     
     for (NSDictionary *newsDic in results) {
         News *new = [[News alloc] init];

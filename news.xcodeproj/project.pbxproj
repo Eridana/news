@@ -27,6 +27,7 @@
 		3F122C4418AD18950007F073 /* DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F122C4318AD18950007F073 /* DetailCell.m */; };
 		3F93786A18B23E33007F5619 /* Communicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786618B23E33007F5619 /* Communicator.m */; };
 		3F93786B18B23E33007F5619 /* Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786918B23E33007F5619 /* Manager.m */; };
+		3F93786E18B27777007F5619 /* NewsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786D18B27777007F5619 /* NewsDetailViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,8 @@
 		3F93786718B23E33007F5619 /* ManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagerDelegate.h; sourceTree = "<group>"; };
 		3F93786818B23E33007F5619 /* Manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Manager.h; sourceTree = "<group>"; };
 		3F93786918B23E33007F5619 /* Manager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Manager.m; sourceTree = "<group>"; };
+		3F93786C18B27777007F5619 /* NewsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsDetailViewController.h; sourceTree = "<group>"; };
+		3F93786D18B27777007F5619 /* NewsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsDetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,23 +136,9 @@
 			isa = PBXGroup;
 			children = (
 				3F122C1018AD0AD90007F073 /* Main.storyboard */,
-				3F122C1318AD0AD90007F073 /* ViewController.h */,
-				3F122C1418AD0AD90007F073 /* ViewController.m */,
+				3F93786F18B27780007F5619 /* Controller */,
+				3F93787018B2778D007F5619 /* Model */,
 				3F122C1618AD0AD90007F073 /* Images.xcassets */,
-				3F122C3318AD0C560007F073 /* News.h */,
-				3F122C3418AD0C560007F073 /* News.m */,
-				3F122C3618AD0C9F0007F073 /* City.h */,
-				3F122C3718AD0C9F0007F073 /* City.m */,
-				3F93786418B23E33007F5619 /* CommunicatorDelegate.h */,
-				3F93786518B23E33007F5619 /* Communicator.h */,
-				3F93786618B23E33007F5619 /* Communicator.m */,
-				3F93786718B23E33007F5619 /* ManagerDelegate.h */,
-				3F93786818B23E33007F5619 /* Manager.h */,
-				3F93786918B23E33007F5619 /* Manager.m */,
-				3F122C3918AD0E1A0007F073 /* JsonParser.h */,
-				3F122C3A18AD0E1A0007F073 /* JsonParser.m */,
-				3F122C4218AD18950007F073 /* DetailCell.h */,
-				3F122C4318AD18950007F073 /* DetailCell.m */,
 				3F122C0518AD0AD90007F073 /* Supporting Files */,
 			);
 			path = news;
@@ -184,6 +173,38 @@
 				3F122C2618AD0AD90007F073 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3F93786F18B27780007F5619 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3F122C1318AD0AD90007F073 /* ViewController.h */,
+				3F122C1418AD0AD90007F073 /* ViewController.m */,
+				3F93786C18B27777007F5619 /* NewsDetailViewController.h */,
+				3F93786D18B27777007F5619 /* NewsDetailViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		3F93787018B2778D007F5619 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3F122C3318AD0C560007F073 /* News.h */,
+				3F122C3418AD0C560007F073 /* News.m */,
+				3F122C3618AD0C9F0007F073 /* City.h */,
+				3F122C3718AD0C9F0007F073 /* City.m */,
+				3F93786418B23E33007F5619 /* CommunicatorDelegate.h */,
+				3F93786518B23E33007F5619 /* Communicator.h */,
+				3F93786618B23E33007F5619 /* Communicator.m */,
+				3F93786718B23E33007F5619 /* ManagerDelegate.h */,
+				3F93786818B23E33007F5619 /* Manager.h */,
+				3F93786918B23E33007F5619 /* Manager.m */,
+				3F122C3918AD0E1A0007F073 /* JsonParser.h */,
+				3F122C3A18AD0E1A0007F073 /* JsonParser.m */,
+				3F122C4218AD18950007F073 /* DetailCell.h */,
+				3F122C4318AD18950007F073 /* DetailCell.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,6 +310,7 @@
 				3F122C3818AD0C9F0007F073 /* City.m in Sources */,
 				3F122C1518AD0AD90007F073 /* ViewController.m in Sources */,
 				3F122C0F18AD0AD90007F073 /* AppDelegate.m in Sources */,
+				3F93786E18B27777007F5619 /* NewsDetailViewController.m in Sources */,
 				3F122C3518AD0C560007F073 /* News.m in Sources */,
 				3F122C4418AD18950007F073 /* DetailCell.m in Sources */,
 				3F122C0B18AD0AD90007F073 /* main.m in Sources */,
