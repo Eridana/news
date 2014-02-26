@@ -11,6 +11,23 @@
 
 @implementation Communicator
 
+-(void)searcNewsByCitiesAndPage:(NSArray *)cities atPage:(NSString *)page
+{
+    // example - http://rbcitynews.ru/api/v1/cities/1/news.json?page=2
+    
+    NSString *urlAsString = [NSString stringWithFormat:@"http://rbcitynews.ru/api/v1/cities/%@/news.json?page=%@", [cities objectAtIndex:0], page];
+    NSURL *url = [[NSURL alloc] initWithString:urlAsString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSError *error = nil;
+    NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+    
+    if (error) {
+        [self.delegate fetchingFailedWithError:error];
+    } else {
+        [self.delegate receivedNewsJSON:response];
+    }
+}
+
 - (void)searchNews
 {
     // почему-то sendAsynchronousRequest не работает.

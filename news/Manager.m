@@ -16,6 +16,11 @@
     [self.communicator searchNews];
 }
 
+-(void)fetchNewsByCitiesAndPage:(NSArray *)cities atPage:(NSString *)page
+{
+    [self.communicator searcNewsByCitiesAndPage:cities atPage:page];
+}
+
 - (void)fetchCities
 {
     [self.communicator searchCities];

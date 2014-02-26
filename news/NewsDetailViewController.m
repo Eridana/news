@@ -25,7 +25,6 @@
     [self.detailTitle setText:_details.title];
     [self.summary setText:_details.summary];
     [self.dateLabel setText:_details.published_at];
-    [self.linkLabel setText:_details.rbcitynews_url];
     [self.cityLabel setText:_details.city];
 }
 
@@ -34,5 +33,12 @@
     [super viewWillAppear:animated];
     [self updateDetails];
   }
+
+- (IBAction)goToNew:(id)sender {
+    if([_details.legacy_url description])
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString: [_details.legacy_url description]]];
+    }
+}
 
 @end

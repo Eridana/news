@@ -15,6 +15,7 @@
 @property (weak, nonatomic) id<CommunicatorDelegate> delegate;
 
 - (void)searchNews;
+- (void)searcNewsByCitiesAndPage:(NSArray *)cities atPage:(NSString *)page;
 - (void)searchCities;
 
 @end

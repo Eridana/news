@@ -13,7 +13,6 @@
 @property (weak, nonatomic) IBOutlet UITextView *detailTitle;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UITextView *summary;
-@property (weak, nonatomic) IBOutlet UILabel *linkLabel;
 @property (weak, nonatomic) IBOutlet UILabel *cityLabel;
 
 @property(strong, nonatomic) News *details;

@@ -17,6 +17,8 @@
     Manager *_manager;
     NSArray *_cities;
     NSArray *_news;
+    NSInteger _pageCount;
+    NSArray *_selectedCities;
 }
 @end
 
@@ -33,6 +35,8 @@
     _manager.communicator = [[Communicator alloc] init];
     _manager.communicator.delegate = _manager;
     _manager.delegate = self;
+    _pageCount = 0;
+    _selectedCities = @[@4];
     
     [_manager fetchCities];
     [_manager fetchNews];
@@ -63,7 +67,14 @@
 
 - (void)didReceiveNews:(NSArray *)news
 {
-    _news = news;
+    if(![_news lastObject]) {
+        _news = news;
+    }
+    else{
+        NSMutableArray *news2 = [_news mutableCopy];
+        [news2 addObjectsFromArray:news];
+        _news = news2;
+    }
     [self.tableView reloadData];
 }
 
@@ -77,6 +88,19 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _news.count;
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    NSInteger currentOffset = scrollView.contentOffset.y;
+    NSInteger maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
+    
+    if (maximumOffset - currentOffset <= -40) {
+        _pageCount++;
+        [_manager fetchNewsByCitiesAndPage: _selectedCities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+        [self.tableView reloadData];
+        NSLog(@"reload");
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

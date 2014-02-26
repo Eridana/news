@@ -14,9 +14,10 @@
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *description;
 @property (strong, nonatomic) NSString *summary;
+@property (strong, nonatomic) NSString *city_id;
 @property (strong, nonatomic) NSString *city;
 @property (strong, nonatomic) NSString *published_at;
-@property (strong, nonatomic) NSString *rbcitynews_url;
+@property (strong, nonatomic) NSString *legacy_url;
 
 
 

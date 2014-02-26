@@ -11,9 +11,9 @@
 
 @implementation News
 
--(void)setCity:(NSString *)city
+-(void)setCity_id:(NSString *)city_id
 {
-    _city = [City getNameById:city];
+    _city = [City getNameById:city_id];
 }
 
 @end
