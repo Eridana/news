@@ -12,8 +12,9 @@
 #import "DetailCell.h"
 #import "Manager.h"
 #import "Communicator.h"
+#import "SettingsViewController.h"
 
-@interface ViewController () <ManagerDelegate, UITableViewDataSource,UITableViewDelegate> {
+@interface ViewController () <ManagerDelegate, UITableViewDataSource, UITableViewDelegate> {
     Manager *_manager;
     NSArray *_cities;
     NSArray *_news;
@@ -27,9 +28,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addSettingsButton];
     [self.view addSubview:_tableView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.navigationController.navigationBar.translucent = NO;
     
     _manager = [[Manager alloc] init];
     _manager.communicator = [[Communicator alloc] init];
@@ -37,9 +40,25 @@
     _manager.delegate = self;
     _pageCount = 0;
     _selectedCities = @[@4];
-    
+        
     [_manager fetchCities];
     [_manager fetchNews];
+}
+
+-(void)addSettingsButton
+{
+    UIButton *settingsButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [settingsButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
+    [settingsButton addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
+    [settingsButton setImage:[UIImage imageNamed:@"settings_gray_44.png"] forState:UIControlStateNormal];
+    UIBarButtonItem *button = [[UIBarButtonItem alloc]initWithCustomView:settingsButton];
+    self.navigationItem.rightBarButtonItem = button;
+}
+
+-(void)showSettings:(UIButton *)sender
+{
+    SettingsViewController *settingsController = [self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"];
+    [self.navigationController pushViewController:settingsController animated:YES];
 }
 
 #pragma mark - Segue

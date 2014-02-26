@@ -30,13 +30,13 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    self.navigationController.navigationBar.translucent = YES;
     [super viewWillAppear:animated];
     [self updateDetails];
   }
 
 - (IBAction)goToNew:(id)sender {
-    if([_details.legacy_url description])
-    {
+    if([_details.legacy_url description]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString: [_details.legacy_url description]]];
     }
 }
