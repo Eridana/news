@@ -10,27 +10,14 @@
 #import "SettingsCell.h"
 #import "City.h"
 
-@interface SettingsViewController () <UITableViewDataSource> {
+@interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate> {
     NSDictionary *_cities;
     NSArray *_keyArray;
+    NSMutableArray *_selectedCities;
 }
-
 @end
 
 @implementation SettingsViewController
-
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-//{
-//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//    if (self) {
-//        _cities = [City cities];
-//        [self.view addSubview:_tableView];
-//        self.tableView.dataSource = self;
-//        [self.tableView reloadData];
-//
-//    }
-//    return self;
-//}
 
 - (void)viewDidLoad
 {
@@ -39,6 +26,7 @@
     _cities = [City cities];
     _keyArray = [_cities allKeys];
 	[self.view addSubview:_tableView];
+    self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView reloadData];
 }
@@ -67,11 +55,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([tableView cellForRowAtIndexPath:indexPath].accessoryType == UITableViewCellAccessoryCheckmark) {
-        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryNone;
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    //_keyArray[indexPath.row];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell.accessoryType == UITableViewCellAccessoryNone) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     else {
-        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
+         cell.accessoryType = UITableViewCellAccessoryNone;
     }
 }
 
