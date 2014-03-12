@@ -10,8 +10,9 @@
 
 @interface City : NSObject
 
-+(NSDictionary *)cities;
-+(NSString *)getNameById:(NSString *)id;
++(NSArray *)cities;
+//+(NSString *)getNameById:(NSString *)id;
++(void)initCitiesWithArray:(NSArray *)cities;
 
 @property (strong, nonatomic) NSString *city_id;
 @property (strong, nonatomic) NSString *name;

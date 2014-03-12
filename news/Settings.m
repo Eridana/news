@@ -7,18 +7,42 @@
 //
 
 #import "Settings.h"
-static NSDictionary * selectedCities;
+static NSMutableArray * selectedCities;
 
 @implementation Settings
 
-+(NSDictionary *) selectedCities
++(NSArray *) selectedCities
 {
+    if(!selectedCities) {
+        City * defaultCity = [[City alloc] init];
+        defaultCity.city_id = @"4";
+        defaultCity.name = @"Уфа";
+        [self initSelectedCitiesWithArray: @[defaultCity]];
+    }
     return selectedCities;
 }
 
-+ (void) setSelectedCities: (NSDictionary *) value
++(void)initSelectedCitiesWithArray:(NSArray *)cities
 {
-    selectedCities = value;
+    selectedCities = [[NSMutableArray alloc] initWithArray:cities];
+}
+
+//+ (void) setSelectedCities: (NSArray *) value
+//{
+//    selectedCities = [value mutableCopy];
+//}
+
++(void)addSelectedCity:(City *)city
+{
+    if(![selectedCities containsObject:city])
+    {
+        [selectedCities addObject:city];
+    }
+}
+
++(void)removeSelectedCity:(City *)city
+{
+    [selectedCities removeObject:city];
 }
 
 @end

@@ -18,7 +18,6 @@
 @property (strong, nonatomic) Communicator *communicator;
 @property (weak, nonatomic) id<ManagerDelegate> delegate;
 
-
 - (void)fetchNews;
 - (void)fetchNewsByCitiesAndPage:(NSArray *)cities atPage:(NSString *)page;
 - (void)fetchCities;

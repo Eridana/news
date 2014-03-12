@@ -12,6 +12,7 @@
 #import "DetailCell.h"
 #import "Manager.h"
 #import "Communicator.h"
+#import "Settings.h"
 #import "SettingsViewController.h"
 
 @interface ViewController () <ManagerDelegate, UITableViewDataSource, UITableViewDelegate> {
@@ -19,7 +20,7 @@
     NSArray *_cities;
     NSArray *_news;
     NSInteger _pageCount;
-    NSArray *_selectedCities;
+    //NSArray *_selectedCities;
 }
 @end
 
@@ -38,11 +39,12 @@
     _manager.communicator = [[Communicator alloc] init];
     _manager.communicator.delegate = _manager;
     _manager.delegate = self;
-    _pageCount = 0;
-    _selectedCities = @[@4];
+    _pageCount = 1;
+    //_selectedCities = @[@4];
         
     [_manager fetchCities];
-    [_manager fetchNews];
+   // [_manager fetchNews];
+    [_manager fetchNewsByCitiesAndPage: [Settings selectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
 }
 
 -(void)addSettingsButton
@@ -80,6 +82,9 @@
 #pragma mark - ManagerDelegate
 - (void)didReceiveCities:(NSArray *)cities
 {
+    [Settings initSelectedCitiesWithArray:cities]; //initWithArray: cities;
+    //NSMutableArray *selectedSities = [Settings selectedCities];
+    [City initCitiesWithArray:cities];
     _cities = cities;
    // [self.tableView reloadData];
 }
@@ -116,7 +121,7 @@
     
     if (maximumOffset - currentOffset <= -40) {
         _pageCount++;
-        [_manager fetchNewsByCitiesAndPage: _selectedCities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+        [_manager fetchNewsByCitiesAndPage: [Settings selectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
         [self.tableView reloadData];
         NSLog(@"reload");
     }

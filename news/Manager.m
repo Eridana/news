@@ -10,6 +10,11 @@
 #import "JsonParser.h"
 #import "Communicator.h"
 
+@interface Manager() <CommunicatorDelegate> {
+   NSMutableArray *news;
+}
+@end
+
 @implementation Manager
 - (void)fetchNews
 {
@@ -28,16 +33,27 @@
 
 #pragma mark - CommunicatorDelegate
 
+-(void)sendNews
+{
+     [self.delegate didReceiveNews:[news copy]];
+}
+
 - (void)receivedNewsJSON:(NSData *)objectNotation
 {
     NSError *error = nil;
-    NSArray *news = [JsonParser newsFromJSON:objectNotation error:&error];
-    
+    NSArray *data = [JsonParser newsFromJSON:objectNotation error:&error];
     if (error != nil) {
         [self.delegate fetchingFailedWithError:error];
         
-    } else {
-        [self.delegate didReceiveNews:news];
+    }
+  else {
+//        [self.delegate didReceiveNews:news];
+      if(!news) {
+          news = [[NSMutableArray alloc] initWithArray:data];
+      }
+      else {
+          [news addObjectsFromArray:data];
+      }
     }
 }
 

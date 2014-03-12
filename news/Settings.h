@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "City.h"
 
 @interface Settings : NSObject
-+(NSDictionary *)selectedCities;
++(NSMutableArray *)selectedCities;
++(void)initSelectedCitiesWithArray:(NSArray *)cities;
++(void)addSelectedCity:(City *)city;
++(void)removeSelectedCity:(City *)city;
 @end

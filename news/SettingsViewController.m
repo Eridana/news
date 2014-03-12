@@ -8,12 +8,13 @@
 
 #import "SettingsViewController.h"
 #import "SettingsCell.h"
+#import "Settings.h"
 #import "City.h"
 
 @interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate> {
-    NSDictionary *_cities;
-    NSArray *_keyArray;
-    NSMutableArray *_selectedCities;
+    //NSDictionary *_cities;
+    NSArray *_cities;
+    //NSArray *_keyArray;
 }
 @end
 
@@ -23,8 +24,8 @@
 {
     self.navigationController.navigationBar.translucent = NO;
     [super viewDidLoad];
-    _cities = [City cities];
-    _keyArray = [_cities allKeys];
+    _cities = [[Settings selectedCities] mutableCopy];
+    //_keyArray = [_cities allKeys];
 	[self.view addSubview:_tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -41,28 +42,37 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return _keyArray.count;
+    return _cities.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"SettingsCell";
     SettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    NSString *key = [_keyArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = [_cities objectForKey:key];
+    City *city = [self getCityByIndexPath:indexPath];
+    cell.textLabel.text = city.name;
     return cell;
+}
+
+- (City *)getCityByIndexPath:(NSIndexPath *)indexPath
+{
+    City * city = [_cities objectAtIndex:indexPath.row];
+    return city;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    //_keyArray[indexPath.row];
+    City *city = [self getCityByIndexPath:indexPath];
+
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;        
+        [Settings addSelectedCity:city];
     }
     else {
          cell.accessoryType = UITableViewCellAccessoryNone;
+        [Settings removeSelectedCity:city];
     }
 }
 

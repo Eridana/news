@@ -11,10 +11,10 @@
 
 @implementation News
 
--(void)setCity_id:(NSString *)city_id
-{
-    _city = [City getNameById:city_id];
-    _city_id = city_id;
-}
+//-(void)setCity_id:(NSString *)city_id
+//{
+//    //_city = [City getNameById:city_id];
+//    _city_id = city_id;
+//}
 
 @end
