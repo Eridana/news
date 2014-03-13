@@ -24,7 +24,7 @@
 {
     self.navigationController.navigationBar.translucent = NO;
     [super viewDidLoad];
-    _cities = [[Settings selectedCities] mutableCopy];
+    _cities = [[[Settings sharedInstance] getSelectedCities] mutableCopy];
     //_keyArray = [_cities allKeys];
 	[self.view addSubview:_tableView];
     self.tableView.delegate = self;
@@ -68,11 +68,11 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;        
-        [Settings addSelectedCity:city];
+        [[Settings sharedInstance] addSelectedCity:city];
     }
     else {
          cell.accessoryType = UITableViewCellAccessoryNone;
-        [Settings removeSelectedCity:city];
+        [[Settings sharedInstance] removeSelectedCity:city];
     }
 }
 

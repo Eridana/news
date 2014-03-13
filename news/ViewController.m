@@ -40,11 +40,9 @@
     _manager.communicator.delegate = _manager;
     _manager.delegate = self;
     _pageCount = 1;
-    //_selectedCities = @[@4];
-        
+    _cities = [[Settings  sharedInstance] getSelectedCities];
     [_manager fetchCities];
-   // [_manager fetchNews];
-    [_manager fetchNewsByCitiesAndPage: [Settings selectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+    [_manager fetchNewsByCitiesAndPage: _cities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
 }
 
 -(void)addSettingsButton
@@ -72,7 +70,9 @@
             if ([segue.identifier isEqualToString:@"showDetails"]) {
                 if ([segue.destinationViewController respondsToSelector:@selector(setDetails:)]) {
                     id cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                    [segue.destinationViewController performSelector:@selector(setDetails:) withObject:_news[indexPath.row]];
+                    NSArray *newsByCity = [[Settings sharedInstance] getNewsByCity:_cities[indexPath.section]];
+                    [segue.destinationViewController performSelector:@selector(setDetails:)
+                                                          withObject:newsByCity[indexPath.row]];
                 }
             }
         }
@@ -82,11 +82,9 @@
 #pragma mark - ManagerDelegate
 - (void)didReceiveCities:(NSArray *)cities
 {
-    [Settings initSelectedCitiesWithArray:cities]; //initWithArray: cities;
-    //NSMutableArray *selectedSities = [Settings selectedCities];
-    [City initCitiesWithArray:cities];
-    _cities = cities;
-   // [self.tableView reloadData];
+//    [Settings initSelectedCitiesWithArray:cities];
+//    [Settings initAllCitiesWithArray:cities];
+//    [self.tableView reloadData];
 }
 
 - (void)didReceiveNews:(NSArray *)news
@@ -99,6 +97,7 @@
         [news2 addObjectsFromArray:news];
         _news = news2;
     }
+    [[Settings sharedInstance] initAllNewsWithArray:_news];
     [self.tableView reloadData];
 }
 
@@ -111,17 +110,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _news.count;
+    return [[Settings sharedInstance] getNewsByCity:_cities[section]].count;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     NSInteger currentOffset = scrollView.contentOffset.y;
     NSInteger maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
-    
-    if (maximumOffset - currentOffset <= -40) {
+    // 60 до конца скролла в таблице
+    if (maximumOffset - currentOffset <= -60) {
         _pageCount++;
-        [_manager fetchNewsByCitiesAndPage: [Settings selectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+        [_manager fetchNewsByCitiesAndPage: _cities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
         [self.tableView reloadData];
         NSLog(@"reload");
     }
@@ -131,12 +130,23 @@
 {
     DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
-    News *new = _news[indexPath.row];
+    NSArray *newsByCity = [[Settings sharedInstance] getNewsByCity:_cities[indexPath.section]];
+    News *new = newsByCity[indexPath.row];
     [cell.titleTextView setText:new.title];
     [cell.dateLabel setText:new.published_at];
-    [cell.cityLabel setText:new.city];
-    
+    if(new.city) {
+        [cell.cityLabel setText:[new.city name]];
+    }
     return cell;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return [_cities count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [_cities[section] name];
 }
 
 @end

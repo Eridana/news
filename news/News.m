@@ -7,14 +7,20 @@
 //
 
 #import "News.h"
-#import "City.h"
+#import "Settings.h"
 
 @implementation News
 
-//-(void)setCity_id:(NSString *)city_id
-//{
-//    //_city = [City getNameById:city_id];
-//    _city_id = city_id;
-//}
+-(id)init
+{
+    self = [super init];
+    return self;
+}
+
+-(void)setCity_id:(NSString *)city_id
+{
+    _city = [[Settings sharedInstance] getCityById:city_id];
+    _city_id = city_id;
+}
 
 @end

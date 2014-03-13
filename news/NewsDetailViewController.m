@@ -25,7 +25,10 @@
     [self.detailTitle setText:_details.title];
     [self.summary setText:_details.summary];
     [self.dateLabel setText:_details.published_at];
-    [self.cityLabel setText:_details.city];
+    if(_details.city) {
+        [self.cityLabel setText:[_details.city name]];
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated

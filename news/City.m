@@ -8,51 +8,40 @@
 
 #import "City.h"
 
-static NSArray * cities;
-
 @implementation City
 
-//+(NSDictionary *)cities
-//{
-////    return @{  @"Ишимбай" : @"1",
-////               @"Салават" : @"2",
-////               @"Стерлитамак" : @"3",
-////               @"Уфа" : @"4",
-////               @"Нефтекамск" : @"5",
-////               @"Белебей" : @"7",
-////               @"Октябрьский" : @"8"
-////            };
-//    return @{
-//               @"1" :@"Ишимбай",
-//               @"2" : @"Салават",
-//               @"3" : @"Стерлитамак",
-//               @"4" : @"Уфа",
-//               @"5" : @"Нефтекамск",
-//               @"7" : @"Белебей",
-//               @"8" : @"Октябрьский"
-//            };
-//}
-
-//+(NSString *)getNameById:(NSString *)byId
-//{
-//    return [cities valueForKey:byId];
-//}
-//
-//-(NSString *)name
-//{
-//    return [cities valueForKey:_city_id];
-//}
-
-+(NSArray *)cities
+-(id)init
 {
-    return cities;
+    self = [super init];
+    return self;
 }
 
-+(void)initCitiesWithArray:(NSArray *)cities
+-(id)initWithId:(NSString *)city_id name:(NSString *)city_name
 {
-    if(!cities) {
-        cities = [[NSArray alloc] initWithArray:cities];
+    self = [self init];
+    if (self) {
+        self.city_id = city_id;
+        self.name = city_name;
     }
+    return self;
+}
+
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.city_id forKey:@"city_id"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self)
+    {
+        _city_id = [aDecoder decodeObjectForKey:@"city_id"];
+        _name = [aDecoder decodeObjectForKey:@"name"];
+    }
+    return self;
 }
 
 @end

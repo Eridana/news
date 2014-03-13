@@ -18,7 +18,7 @@
     // example - http://rbcitynews.ru/api/v1/cities/1/news.json?page=2
     // нужно это наверное как-то пределать. и сделать sendAsynchronousRequest
     for (int i = 0; i < cities.count; i++) {
-        City *city = [cities objectAtIndex:0];
+        City *city = [cities objectAtIndex:i];
         NSString *urlAsString = [NSString stringWithFormat:@"http://rbcitynews.ru/api/v1/cities/%@/news.json?page=%@", city.city_id, page];
         NSURL *url = [[NSURL alloc] initWithString:urlAsString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -37,8 +37,8 @@
 
 - (void)searchNews
 {
-    if(![Settings selectedCities]) {
-        [self searcNewsByCitiesAndPage: [Settings selectedCities] atPage: @"1"];
+    if(![[Settings sharedInstance] getSelectedCities]) {
+        [self searcNewsByCitiesAndPage: [[Settings sharedInstance] getSelectedCities] atPage: @"1"];
     }
     else {
         NSURLRequest *request = [NSURLRequest requestWithURL:[[NSURL alloc] initWithString:@"http://rbcitynews.ru/api/v1/news.json"]];
