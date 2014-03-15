@@ -71,8 +71,11 @@
         [[Settings sharedInstance] addSelectedCity:city];
     }
     else {
-         cell.accessoryType = UITableViewCellAccessoryNone;
-        [[Settings sharedInstance] removeSelectedCity:city];
+        // список выбранных городов не может быть пустым
+        if([[Settings sharedInstance] getSelectedCities].count != 1) {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            [[Settings sharedInstance] removeSelectedCity:city];
+        }
     }
 }
 
