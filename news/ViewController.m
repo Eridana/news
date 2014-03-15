@@ -20,7 +20,6 @@
     NSArray *_cities;
     NSArray *_news;
     NSInteger _pageCount;
-    //NSArray *_selectedCities;
 }
 @end
 
@@ -61,6 +60,18 @@
     [self.navigationController pushViewController:settingsController animated:YES];
 }
 
+-(NSArray *)getNewsByCity:(City *)city
+{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (News *news in _news) {
+        if ([[NSString stringWithFormat:@"%@", news.city_id]
+             isEqualToString:[NSString stringWithFormat:@"%@", city.city_id]]) {
+            [result addObject:news];
+        }
+    }
+    return [result copy];
+}
+
 #pragma mark - Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -70,7 +81,7 @@
             if ([segue.identifier isEqualToString:@"showDetails"]) {
                 if ([segue.destinationViewController respondsToSelector:@selector(setDetails:)]) {
                     id cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                    NSArray *newsByCity = [[Settings sharedInstance] getNewsByCity:_cities[indexPath.section]];
+                    NSArray *newsByCity = [self getNewsByCity:_cities[indexPath.section]];
                     [segue.destinationViewController performSelector:@selector(setDetails:)
                                                           withObject:newsByCity[indexPath.row]];
                 }
@@ -97,7 +108,6 @@
         [news2 addObjectsFromArray:news];
         _news = news2;
     }
-    [[Settings sharedInstance] initAllNewsWithArray:_news];
     [self.tableView reloadData];
 }
 
@@ -110,7 +120,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[Settings sharedInstance] getNewsByCity:_cities[section]].count;
+    return [self getNewsByCity:_cities[section]].count;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
@@ -130,7 +140,7 @@
 {
     DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
-    NSArray *newsByCity = [[Settings sharedInstance] getNewsByCity:_cities[indexPath.section]];
+    NSArray *newsByCity = [self getNewsByCity:_cities[indexPath.section]];
     News *new = newsByCity[indexPath.row];
     [cell.titleTextView setText:new.title];
     [cell.dateLabel setText:new.published_at];

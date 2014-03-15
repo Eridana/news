@@ -11,7 +11,7 @@
 
  NSMutableArray * selectedCities;
  NSMutableArray * allCities;
- NSMutableArray * allNews;
+ //NSMutableArray * allNews;
 
 @implementation Settings
 
@@ -64,30 +64,20 @@
     [data writeToFile:filename atomically:YES];
 }
 
--(NSArray *) allNews
-{
-    if(!allNews) {
-        return [[NSArray alloc] init];
-    }
-    return allNews;
-}
+//-(NSArray *) allNews
+//{
+//    if(!allNews) {
+//        return [[NSArray alloc] init];
+//    }
+//    return allNews;
+//}
+//
+//-(void)initAllNewsWithArray:(NSArray *)news
+//{
+//    allNews = [[NSMutableArray alloc] initWithArray:news];
+//}
 
--(void)initAllNewsWithArray:(NSArray *)news
-{
-    allNews = [[NSMutableArray alloc] initWithArray:news];
-}
 
--(NSArray *)getNewsByCity:(City *)city
-{
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    for (News *news in allNews) {
-        if ([[NSString stringWithFormat:@"%@", news.city_id]
-             isEqualToString:[NSString stringWithFormat:@"%@", city.city_id]]) {
-             [result addObject:news];
-         }
-    }
-    return [result copy];
-}
 
 -(NSArray *) getSelectedCities
 {
