@@ -12,7 +12,8 @@
 
 @property (strong, nonatomic) NSString *city_id;
 @property (strong, nonatomic) NSString *name;
+@property (nonatomic) BOOL selected;
 
--(id)initWithId:(NSString *)city_id name:(NSString *)city_name;
+-(id)initWithId:(NSString *)city_id name:(NSString *)city_name selected:(BOOL) isSelected;
 -(id)init;
 @end

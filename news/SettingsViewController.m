@@ -12,9 +12,7 @@
 #import "City.h"
 
 @interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate> {
-    //NSDictionary *_cities;
     NSArray *_cities;
-    //NSArray *_keyArray;
 }
 @end
 
@@ -25,7 +23,6 @@
     self.navigationController.navigationBar.translucent = NO;
     [super viewDidLoad];
     _cities = [[[Settings sharedInstance] getSelectedCities] mutableCopy];
-    //_keyArray = [_cities allKeys];
 	[self.view addSubview:_tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -51,6 +48,12 @@
     SettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     City *city = [self getCityByIndexPath:indexPath];
     cell.textLabel.text = city.name;
+    if(city.selected) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     return cell;
 }
 
@@ -68,15 +71,20 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;        
-        [[Settings sharedInstance] addSelectedCity:city];
+        [[Settings sharedInstance] selectCity:city];
     }
     else {
         // список выбранных городов не может быть пустым
         if([[Settings sharedInstance] getSelectedCities].count != 1) {
             cell.accessoryType = UITableViewCellAccessoryNone;
-            [[Settings sharedInstance] removeSelectedCity:city];
+            [[Settings sharedInstance] unselectCity:city];
         }
     }
+}
+
+-(void)viewDidAppear
+{
+    
 }
 
 @end

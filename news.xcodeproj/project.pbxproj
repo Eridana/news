@@ -35,6 +35,8 @@
 		3F93786B18B23E33007F5619 /* Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786918B23E33007F5619 /* Manager.m */; };
 		3F93786E18B27777007F5619 /* NewsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786D18B27777007F5619 /* NewsDetailViewController.m */; };
 		3F95748A18C0C11400A2A4FC /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F95748918C0C11400A2A4FC /* Settings.m */; };
+		3F95DF1518D60BF6000D3463 /* NewsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F95DF1418D60BF5000D3463 /* NewsHelper.m */; };
+		3F96EFF418D59F8A004628E2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F96EFF318D59F8A004628E2 /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +95,9 @@
 		3F93786D18B27777007F5619 /* NewsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsDetailViewController.m; sourceTree = "<group>"; };
 		3F95748818C0C11300A2A4FC /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		3F95748918C0C11400A2A4FC /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		3F95DF1318D60BF5000D3463 /* NewsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsHelper.h; sourceTree = "<group>"; };
+		3F95DF1418D60BF5000D3463 /* NewsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsHelper.m; sourceTree = "<group>"; };
+		3F96EFF318D59F8A004628E2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F96EFF418D59F8A004628E2 /* CFNetwork.framework in Frameworks */,
 				3F122C0118AD0AD90007F073 /* CoreGraphics.framework in Frameworks */,
 				3F122C0318AD0AD90007F073 /* UIKit.framework in Frameworks */,
 				3F122BFF18AD0AD90007F073 /* Foundation.framework in Frameworks */,
@@ -141,6 +147,7 @@
 		3F122BFD18AD0AD90007F073 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F96EFF318D59F8A004628E2 /* CFNetwork.framework */,
 				3F122BFE18AD0AD90007F073 /* Foundation.framework */,
 				3F122C0018AD0AD90007F073 /* CoreGraphics.framework */,
 				3F122C0218AD0AD90007F073 /* UIKit.framework */,
@@ -238,6 +245,8 @@
 				3F122C3A18AD0E1A0007F073 /* JsonParser.m */,
 				3F95748818C0C11300A2A4FC /* Settings.h */,
 				3F95748918C0C11400A2A4FC /* Settings.m */,
+				3F95DF1318D60BF5000D3463 /* NewsHelper.h */,
+				3F95DF1418D60BF5000D3463 /* NewsHelper.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -347,6 +356,7 @@
 				3F93786A18B23E33007F5619 /* Communicator.m in Sources */,
 				3F95748A18C0C11400A2A4FC /* Settings.m in Sources */,
 				3F90383818BE391C00AC689E /* SettingsCell.m in Sources */,
+				3F95DF1518D60BF6000D3463 /* NewsHelper.m in Sources */,
 				3F122C3B18AD0E1A0007F073 /* JsonParser.m in Sources */,
 				3F122C3818AD0C9F0007F073 /* City.m in Sources */,
 				3F122C1518AD0AD90007F073 /* ViewController.m in Sources */,

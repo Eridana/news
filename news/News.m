@@ -23,4 +23,19 @@
     _city_id = city_id;
 }
 
+-(void)setPublished_at:(NSString *)published_at
+{
+    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
+    published_at =[self removeColonFromTimeZoneInDate:published_at];
+    _date= [dateFormatter dateFromString:published_at];
+}
+
+- (NSString *)removeColonFromTimeZoneInDate:(NSString *)dateAsString {
+       return [dateAsString stringByReplacingOccurrencesOfString:@":"
+                                           withString:@""
+                                              options:0
+                                                range:NSMakeRange([dateAsString length] - 5,5)];
+}
+
 @end

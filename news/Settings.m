@@ -11,7 +11,6 @@
 
  NSMutableArray * selectedCities;
  NSMutableArray * allCities;
- //NSMutableArray * allNews;
 
 @implementation Settings
 
@@ -47,13 +46,13 @@
 {
     return
     @[
-        [[City alloc] initWithId: @"4" name: @"Уфа"],
-        [[City alloc] initWithId: @"7" name: @"Белебей"],
-        [[City alloc] initWithId: @"1" name: @"Ишимбай"],
-        [[City alloc] initWithId: @"5" name: @"Нефтекамск"],
-        [[City alloc] initWithId: @"8" name: @"Октябрьский"],
-        [[City alloc] initWithId: @"2" name: @"Салават"],
-        [[City alloc] initWithId: @"3" name: @"Стерлитамак"]
+        [[City alloc] initWithId: @"4" name: @"Уфа"         selected: YES],
+        [[City alloc] initWithId: @"7" name: @"Белебей"     selected: YES],
+        [[City alloc] initWithId: @"1" name: @"Ишимбай"     selected: YES],
+        [[City alloc] initWithId: @"5" name: @"Нефтекамск"  selected: YES],
+        [[City alloc] initWithId: @"8" name: @"Октябрьский" selected: YES],
+        [[City alloc] initWithId: @"2" name: @"Салават"     selected: YES],
+        [[City alloc] initWithId: @"3" name: @"Стерлитамак" selected: YES]
     ];
 }
 
@@ -103,28 +102,19 @@
     return result;
 }
 
-//
-//-(void)initSelectedCitiesWithArray:(NSArray *)cities
-//{
-//    selectedCities = [[NSMutableArray alloc] initWithArray:cities];
-//}
-//
-//-(void)initAllCitiesWithArray:(NSArray *)cities
-//{
-//    allCities = [[NSMutableArray alloc] initWithArray:cities];
-//}
-
--(void)addSelectedCity:(City *)city
+-(void)selectCity:(City *)city
 {
-    if(![selectedCities containsObject:city])
-    {
-        [selectedCities addObject:city];
-    }
+    city.selected = YES;
+//    if(![selectedCities containsObject:city])
+//    {
+//        [selectedCities addObject:city];
+//    }
 }
 
--(void)removeSelectedCity:(City *)city
+-(void)unselectCity:(City *)city
 {
-    [selectedCities removeObject:city];
+    city.selected = NO;
+    //[selectedCities removeObject:city];
 }
 
 @end

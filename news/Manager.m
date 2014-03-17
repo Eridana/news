@@ -11,7 +11,7 @@
 #import "Communicator.h"
 
 @interface Manager() <CommunicatorDelegate> {
-   NSMutableArray *news;
+   //NSMutableArray *news;
 }
 @end
 
@@ -35,7 +35,7 @@
 
 -(void)sendNews
 {
-     [self.delegate didReceiveNews:[news copy]];
+     //[self.delegate didReceiveNews:[news copy]];
 }
 
 - (void)receivedNewsJSON:(NSData *)objectNotation
@@ -47,13 +47,13 @@
         
     }
   else {
-//        [self.delegate didReceiveNews:news];
-      if(!news) {
-          news = [[NSMutableArray alloc] initWithArray:data];
-      }
-      else {
-          [news addObjectsFromArray:data];
-      }
+        [self.delegate didReceiveNews:data];
+//      if(!news) {
+//          news = [[NSMutableArray alloc] initWithArray:data];
+//      }
+//      else {
+//          [news addObjectsFromArray:data];
+//      }
     }
 }
 

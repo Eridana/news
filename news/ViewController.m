@@ -14,11 +14,14 @@
 #import "Communicator.h"
 #import "Settings.h"
 #import "SettingsViewController.h"
+#import "NewsHelper.h"
 
 @interface ViewController () <ManagerDelegate, UITableViewDataSource, UITableViewDelegate> {
+    UIActivityIndicatorView *_activityIndicator;
     Manager *_manager;
+    NSDateFormatter *_dateFormatter;
     NSArray *_cities;
-    NSArray *_news;
+    //NSArray *_news;
     NSInteger _pageCount;
 }
 @end
@@ -33,6 +36,15 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.navigationController.navigationBar.translucent = NO;
+    
+    _dateFormatter = [[NSDateFormatter alloc] init];
+    [_dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss zzz"];
+    
+    _activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _activityIndicator.center = CGPointMake(self.view.frame.size.width / 2.0, self.view.frame.size.height / 2.0);
+    [self.view addSubview: _activityIndicator];
+    
+    [_activityIndicator startAnimating];
     
     _manager = [[Manager alloc] init];
     _manager.communicator = [[Communicator alloc] init];
@@ -60,18 +72,6 @@
     [self.navigationController pushViewController:settingsController animated:YES];
 }
 
--(NSArray *)getNewsByCity:(City *)city
-{
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    for (News *news in _news) {
-        if ([[NSString stringWithFormat:@"%@", news.city_id]
-             isEqualToString:[NSString stringWithFormat:@"%@", city.city_id]]) {
-            [result addObject:news];
-        }
-    }
-    return [result copy];
-}
-
 #pragma mark - Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -81,7 +81,7 @@
             if ([segue.identifier isEqualToString:@"showDetails"]) {
                 if ([segue.destinationViewController respondsToSelector:@selector(setDetails:)]) {
                     id cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                    NSArray *newsByCity = [self getNewsByCity:_cities[indexPath.section]];
+                    NSArray *newsByCity = [[NewsHelper sharedInstance] getNewsByCity:_cities[indexPath.section]];
                     [segue.destinationViewController performSelector:@selector(setDetails:)
                                                           withObject:newsByCity[indexPath.row]];
                 }
@@ -100,15 +100,22 @@
 
 - (void)didReceiveNews:(NSArray *)news
 {
-    if(![_news lastObject]) {
-        _news = news;
+//    if(![_news lastObject]) {
+//        _news = news;
+//    }
+//    else{
+//        NSMutableArray *news2 = [_news mutableCopy];
+//        [news2 addObjectsFromArray:news];
+//        _news = news2;
+//        
+//    }
+    if(news) {
+        [[NewsHelper sharedInstance] setNews:news];
+        [_activityIndicator stopAnimating];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateTable];
+        });
     }
-    else{
-        NSMutableArray *news2 = [_news mutableCopy];
-        [news2 addObjectsFromArray:news];
-        _news = news2;
-    }
-    [self.tableView reloadData];
 }
 
 - (void)fetchingFailedWithError:(NSError *)error
@@ -116,11 +123,17 @@
     NSLog(@"Error %@; %@", error, [error localizedDescription]);
 }
 
+
+- (void) updateTable
+{
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self getNewsByCity:_cities[section]].count;
+    return [[NewsHelper sharedInstance] getNewsByCity:_cities[section]].count;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
@@ -139,11 +152,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    
-    NSArray *newsByCity = [self getNewsByCity:_cities[indexPath.section]];
+    NSArray *newsByCity = [[NewsHelper sharedInstance] getNewsByCity:_cities[indexPath.section]];
     News *new = newsByCity[indexPath.row];
     [cell.titleTextView setText:new.title];
-    [cell.dateLabel setText:new.published_at];
+    NSString *date = [_dateFormatter stringFromDate:new.date];
+    [cell.dateLabel setText:date];
     if(new.city) {
         [cell.cityLabel setText:[new.city name]];
     }
@@ -151,6 +164,9 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if([[NewsHelper sharedInstance] allNews].count == 0) {
+        return 0;
+    }
     return [_cities count];
 }
 

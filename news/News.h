@@ -19,7 +19,7 @@
 @property (strong, nonatomic) City *city;
 @property (strong, nonatomic) NSString *published_at;
 @property (strong, nonatomic) NSString *legacy_url;
-
+@property (strong, nonatomic) NSDate *date;
 -(id)init;
 
 @end

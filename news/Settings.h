@@ -17,8 +17,8 @@
 -(NSMutableArray *)getSelectedCities;
 -(NSMutableArray *)getAllCities;
 -(City *)getCityById:(NSString *)byId;
--(void)addSelectedCity:(City *)city;
--(void)removeSelectedCity:(City *)city;
+-(void)selectCity:(City *)city;
+-(void)unselectCity:(City *)city;
 
 - (void)saveSelectedSities;
 
