@@ -11,6 +11,5 @@
 @protocol CommunicatorDelegate
 - (void)receivedNewsJSON:(NSData *)objectNotation;
 - (void)sendNews;
-- (void)receivedCitiesJSON:(NSData *)objectNotation;
 - (void)fetchingFailedWithError:(NSError *)error;
 @end

@@ -26,11 +26,6 @@
     [self.communicator searcNewsByCitiesAndPage:cities atPage:page];
 }
 
-- (void)fetchCities
-{
-    [self.communicator searchCities];
-}
-
 #pragma mark - CommunicatorDelegate
 
 -(void)sendNews
@@ -48,25 +43,6 @@
     }
   else {
         [self.delegate didReceiveNews:data];
-//      if(!news) {
-//          news = [[NSMutableArray alloc] initWithArray:data];
-//      }
-//      else {
-//          [news addObjectsFromArray:data];
-//      }
-    }
-}
-
-- (void)receivedCitiesJSON:(NSData *)objectNotation
-{
-    NSError *error = nil;
-    NSArray *cities = [JsonParser citiesFromJSON:objectNotation error:&error];
-    
-    if (error != nil) {
-        [self.delegate fetchingFailedWithError:error];
-        
-    } else {
-        [self.delegate didReceiveCities:cities];
     }
 }
 

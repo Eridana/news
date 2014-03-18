@@ -18,7 +18,7 @@
 + (NewsHelper *)sharedInstance;
 
 -(void)setNews:(NSArray *)news;
--(void)cleanNews;
+-(void)clearNews;
 -(NSArray *)getNewsByCity:(City *)city;
 
 @end

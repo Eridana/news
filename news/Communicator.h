@@ -16,6 +16,5 @@
 
 - (void)searchNews;
 - (void)searcNewsByCitiesAndPage:(NSArray *)cities atPage:(NSString *)page;
-- (void)searchCities;
 
 @end

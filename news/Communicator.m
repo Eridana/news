@@ -21,18 +21,18 @@
         NSString *urlAsString = [NSString stringWithFormat:@"http://rbcitynews.ru/api/v1/cities/%@/news.json?page=%@", city.city_id, page];
         NSURL *url = [[NSURL alloc] initWithString:urlAsString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        NSError *error = nil;
-        NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+        //NSError *error = nil;
+        //NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
         
         // возможно все это нужно делать через NSOperationQueue.
-//        [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
             if (error) {
                 [self.delegate fetchingFailedWithError:error];
             }
             else {
-                [self.delegate receivedNewsJSON:response];
+                [self.delegate receivedNewsJSON:data];
             }
-//        }];
+        }];
     }
     [self.delegate sendNews];
 }
@@ -53,19 +53,5 @@
         }];
     }
 }
-
-
-- (void)searchCities
-{
-    NSURLRequest *request = [NSURLRequest requestWithURL:[[NSURL alloc] initWithString:@"http://rbcitynews.ru/api/v1/cities.json"]];
-    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *    data, NSError *error) {
-        if (error) {
-            [self.delegate fetchingFailedWithError:error];
-        } else {
-            [self.delegate receivedCitiesJSON:data];
-        }
-    }];
-}
-
 
 @end

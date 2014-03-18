@@ -11,6 +11,5 @@
 @interface JsonParser : NSObject
 
 + (NSArray *)newsFromJSON:(NSData *)objectNotation error:(NSError **)error;
-+ (NSArray *)citiesFromJSON:(NSData *)objectNotation error:(NSError **)error;
 
 @end

@@ -12,39 +12,6 @@
 
 @implementation JsonParser
 
-+ (NSArray *)citiesFromJSON:(NSData *)objectNotation error:(NSError **)error
-{
-    NSError *localError = nil;
-    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:objectNotation options:0 error:&localError];
-    
-    if (localError != nil) {
-        *error = localError;
-        return nil;
-    }
-    
-    NSMutableArray *cities = [[NSMutableArray alloc] init];
-    
-    NSArray *results = [parsedObject valueForKey:@"cities"];
-    
-    for (NSDictionary *cityDic in results) {
-        City *city = [[City alloc] init];
-        
-        for (NSString *key in cityDic) {
-            if ([city respondsToSelector:NSSelectorFromString(key)]) {
-                [city setValue:[cityDic valueForKey:key] forKey:key];
-            }
-            if([key isEqualToString:@"id"]) {
-                [city setValue:[cityDic valueForKey:key] forKey:@"city_id"];
-            }
-        }
-        
-        [cities addObject:city];
-    }
-    
-    return cities;
-
-}
-
 + (NSArray *)newsFromJSON:(NSData *)objectNotation error:(NSError **)error
 {
     NSError *localError = nil;

@@ -20,5 +20,5 @@
 
 - (void)fetchNews;
 - (void)fetchNewsByCitiesAndPage:(NSArray *)cities atPage:(NSString *)page;
-- (void)fetchCities;
+
 @end

@@ -42,18 +42,13 @@
     return self;
 }
 
-//-(NSArray *)getAllNews
-//{
-//    return [self.allNews copy];
-//}
-
 -(void)setNews:(NSArray *)news
 {
     [_news addObjectsFromArray: news];
     [_allNews addObjectsFromArray:news];
 }
 
--(void)cleanNews
+-(void)clearNews
 {
     [_news removeAllObjects];
 }

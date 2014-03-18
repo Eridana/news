@@ -10,6 +10,5 @@
 
 @protocol ManagerDelegate
 - (void)didReceiveNews:(NSArray *)news;
-- (void)didReceiveCities:(NSArray *)news;
 - (void)fetchingFailedWithError:(NSError *)error;
 @end

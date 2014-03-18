@@ -31,18 +31,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addSettingsButton];
+    [self addButtons];
     [self.view addSubview:_tableView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.navigationController.navigationBar.translucent = NO;
     
     _dateFormatter = [[NSDateFormatter alloc] init];
-    [_dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss zzz"];
+    [_dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
     
     _activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     _activityIndicator.center = CGPointMake(self.view.frame.size.width / 2.0, self.view.frame.size.height / 2.0);
-    [self.view addSubview: _activityIndicator];
+    [self.tableView addSubview: _activityIndicator];
     
     [_activityIndicator startAnimating];
     
@@ -52,18 +52,28 @@
     _manager.delegate = self;
     _pageCount = 1;
     _cities = [[Settings  sharedInstance] getSelectedCities];
-    [_manager fetchCities];
+
     [_manager fetchNewsByCitiesAndPage: _cities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
 }
 
--(void)addSettingsButton
+-(void)addButtons
 {
-    UIButton *settingsButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [settingsButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
     [settingsButton addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
-    [settingsButton setImage:[UIImage imageNamed:@"settings_gray_44.png"] forState:UIControlStateNormal];
-    UIBarButtonItem *button = [[UIBarButtonItem alloc]initWithCustomView:settingsButton];
-    self.navigationItem.rightBarButtonItem = button;
+    [settingsButton setImage:[UIImage imageNamed:@"_settings_icon_48.png"] forState:UIControlStateNormal];
+    UIBarButtonItem *uiSettingsButton = [[UIBarButtonItem alloc]initWithCustomView:settingsButton];
+    
+    UIButton *refreshButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [refreshButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
+    [refreshButton addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventTouchUpInside];
+    [refreshButton setImage:[UIImage imageNamed:@"_refresh_icon_48.png"] forState:UIControlStateNormal];
+    UIBarButtonItem *uiRefreshButton = [[UIBarButtonItem alloc]initWithCustomView:refreshButton];
+    
+//    UIBarButtonItem *uiRefreshButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+//                                                                                    target:self action:@selector(refresh:)];
+    
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:uiSettingsButton, uiRefreshButton, nil];
 }
 
 -(void)showSettings:(UIButton *)sender
@@ -90,28 +100,28 @@
     }
 }
 
-#pragma mark - ManagerDelegate
-- (void)didReceiveCities:(NSArray *)cities
+
+- (void) updateTable
 {
-//    [Settings initSelectedCitiesWithArray:cities];
-//    [Settings initAllCitiesWithArray:cities];
-//    [self.tableView reloadData];
+    [self.tableView reloadData];
 }
+
+
+-(void)refresh
+{
+    [[NewsHelper sharedInstance] clearNews];
+    _pageCount = 1;
+    [_manager fetchNewsByCitiesAndPage: _cities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+    
+}
+
+#pragma mark - ManagerDelegate
 
 - (void)didReceiveNews:(NSArray *)news
 {
-//    if(![_news lastObject]) {
-//        _news = news;
-//    }
-//    else{
-//        NSMutableArray *news2 = [_news mutableCopy];
-//        [news2 addObjectsFromArray:news];
-//        _news = news2;
-//        
-//    }
+    [[NewsHelper sharedInstance] setNews:news];
+    [_activityIndicator stopAnimating];
     if(news) {
-        [[NewsHelper sharedInstance] setNews:news];
-        [_activityIndicator stopAnimating];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateTable];
         });
@@ -123,12 +133,6 @@
     NSLog(@"Error %@; %@", error, [error localizedDescription]);
 }
 
-
-- (void) updateTable
-{
-    [self.tableView reloadData];
-}
-
 #pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -138,14 +142,18 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    NSInteger currentOffset = scrollView.contentOffset.y;
-    NSInteger maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
-    // 60 до конца скролла в таблице
-    if (maximumOffset - currentOffset <= -60) {
-        _pageCount++;
-        [_manager fetchNewsByCitiesAndPage: _cities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
-        [self.tableView reloadData];
-        NSLog(@"reload");
+    if([[NewsHelper sharedInstance] allNews].count != 0) {
+        NSInteger currentOffset = scrollView.contentOffset.y;
+        NSInteger maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
+        // 60 до конца скролла в таблице
+        if (maximumOffset - currentOffset <= -60) {
+            _pageCount++;
+            [_manager fetchNewsByCitiesAndPage: _cities atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateTable];
+            });
+            NSLog(@"reload");
+        }
     }
 }
 
