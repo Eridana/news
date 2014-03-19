@@ -20,6 +20,6 @@
 -(void)selectCity:(City *)city;
 -(void)unselectCity:(City *)city;
 
-- (void)saveSelectedSities;
+- (void)saveCities;
 
 @end

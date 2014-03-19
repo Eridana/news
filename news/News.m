@@ -17,6 +17,11 @@
     return self;
 }
 
+-(void)setSummary:(NSString *)summary
+{
+    _summary = [summary stringByReplacingOccurrencesOfString:@"&quot;" withString:@"\""];
+}
+
 -(void)setCity_id:(NSString *)city_id
 {
     _city = [[Settings sharedInstance] getCityById:city_id];

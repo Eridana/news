@@ -22,7 +22,7 @@
 {
     self.navigationController.navigationBar.translucent = NO;
     [super viewDidLoad];
-    _cities = [[[Settings sharedInstance] getSelectedCities] mutableCopy];
+    _cities = [[[Settings sharedInstance] getAllCities] mutableCopy];
 	[self.view addSubview:_tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

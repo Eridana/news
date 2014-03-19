@@ -55,6 +55,7 @@
 
 -(NSArray *)getNewsByCity:(City *)city
 {
+    if(city.selected == NO) return [[NSArray alloc] init];
     NSMutableArray *result = [[NSMutableArray alloc] init];
     for (News *news in [_news copy]) {
         if ([[NSString stringWithFormat:@"%@", news.city_id]

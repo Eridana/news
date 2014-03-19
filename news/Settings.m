@@ -9,11 +9,10 @@
 #import "Settings.h"
 #import "City.h"
 
- NSMutableArray * selectedCities;
+ //NSMutableArray * selectedCities;
  NSMutableArray * allCities;
 
 @implementation Settings
-
 
 + (Settings *)sharedInstance
 {
@@ -25,23 +24,22 @@
     return _sharedInstance;
 }
 
+
 - (id)init
 {
     self = [super init];
     if (self) {
-        NSData * data = [NSData dataWithContentsOfFile:[NSHomeDirectory() stringByAppendingString:@"/Documents/selected_cities.bin"]];
-        selectedCities = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        if (selectedCities == nil) {
-            selectedCities = [NSMutableArray arrayWithArray:[self getCitiesArray]];
-            [self saveSelectedSities];
-        }
-        if(allCities == nil) {
+        NSData * data = [NSData dataWithContentsOfFile:[NSHomeDirectory() stringByAppendingString:@"/Documents/all_cities.bin"]];
+        allCities = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        if (allCities == nil) {
             allCities = [NSMutableArray arrayWithArray:[self getCitiesArray]];
+            [self saveCities];
         }
     }
     return self;
 }
-                              
+
+
 -(NSArray *)getCitiesArray
 {
     return
@@ -56,37 +54,32 @@
     ];
 }
 
--(void)saveSelectedSities
+
+-(void)saveCities
 {
-    NSString * filename = [NSHomeDirectory() stringByAppendingString:@"/Documents/selected_cities.bin"];
-    NSData * data = [NSKeyedArchiver archivedDataWithRootObject:selectedCities];
+    NSString * filename = [NSHomeDirectory() stringByAppendingString:@"/Documents/all_cities.bin"];
+    NSData * data = [NSKeyedArchiver archivedDataWithRootObject:allCities];
     [data writeToFile:filename atomically:YES];
 }
-
-//-(NSArray *) allNews
-//{
-//    if(!allNews) {
-//        return [[NSArray alloc] init];
-//    }
-//    return allNews;
-//}
-//
-//-(void)initAllNewsWithArray:(NSArray *)news
-//{
-//    allNews = [[NSMutableArray alloc] initWithArray:news];
-//}
-
 
 
 -(NSArray *) getSelectedCities
 {
-    return selectedCities;
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (City *city in allCities) {
+        if(city && city.selected == YES) {
+            [result addObject:city];
+        }
+    }
+    return result;
 }
+
 
 -(NSArray *) getAllCities
 {
     return allCities;
 }
+
 
 -(City *)getCityById:(NSString *)byId
 {
@@ -102,19 +95,16 @@
     return result;
 }
 
+
 -(void)selectCity:(City *)city
 {
     city.selected = YES;
-//    if(![selectedCities containsObject:city])
-//    {
-//        [selectedCities addObject:city];
-//    }
 }
+
 
 -(void)unselectCity:(City *)city
 {
     city.selected = NO;
-    //[selectedCities removeObject:city];
 }
 
 @end

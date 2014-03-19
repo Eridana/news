@@ -18,6 +18,8 @@
     // example - http://rbcitynews.ru/api/v1/cities/1/news.json?page=2
     for (int i = 0; i < cities.count; i++) {
         City *city = [cities objectAtIndex:i];
+        if(city.selected == NO) continue;
+        
         NSString *urlAsString = [NSString stringWithFormat:@"http://rbcitynews.ru/api/v1/cities/%@/news.json?page=%@", city.city_id, page];
         NSURL *url = [[NSURL alloc] initWithString:urlAsString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
