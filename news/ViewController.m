@@ -21,6 +21,7 @@
     Manager *_manager;
     NSDateFormatter *_dateFormatter;
     NSInteger _pageCount;
+    BOOL _clearTable;
 }
 @end
 
@@ -35,6 +36,7 @@
     self.tableView.delegate = self;
     self.navigationController.navigationBar.translucent = NO;
     
+    _clearTable = NO;
     _dateFormatter = [[NSDateFormatter alloc] init];
     [_dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
     
@@ -59,20 +61,31 @@
     [settingsButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
     [settingsButton addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
     [settingsButton setImage:[UIImage imageNamed:@"_settings_icon_48.png"] forState:UIControlStateNormal];
-    UIBarButtonItem *uiSettingsButton = [[UIBarButtonItem alloc]initWithCustomView:settingsButton];
+    UIBarButtonItem *uiSettingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
     
     UIButton *refreshButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [refreshButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
-    [refreshButton addTarget:self action:@selector(updateData:) forControlEvents:UIControlEventTouchUpInside];
+    [refreshButton addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventTouchUpInside];
     [refreshButton setImage:[UIImage imageNamed:@"_refresh_icon_48.png"] forState:UIControlStateNormal];
-    UIBarButtonItem *uiRefreshButton = [[UIBarButtonItem alloc]initWithCustomView:refreshButton];
-    
-//    UIBarButtonItem *uiRefreshButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-//                                                                                    target:self action:@selector(refresh:)];
-    
+    UIBarButtonItem *uiRefreshButton = [[UIBarButtonItem alloc] initWithCustomView:refreshButton];
     self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:uiSettingsButton, uiRefreshButton, nil];
+    
+    // add footer view
+    [self addFooterToTableView];
 }
 
+-(void)addFooterToTableView
+{
+    // separator is dissappearing (ios7 bug)
+    // will need to add activity indicator in footerview
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 2.0, 300.0, 60.0)];
+    UIButton *loadMoreButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [loadMoreButton setTitle: @"Загрузить еще новости" forState:UIControlStateNormal];
+    [loadMoreButton addTarget:self action:@selector(LoadMoreNews:) forControlEvents:UIControlEventTouchUpInside];
+    [loadMoreButton setFrame:CGRectMake(10.0, 2.0, 300.0, 44.0)];
+    [footerView addSubview:loadMoreButton];
+    [self.tableView setTableFooterView:footerView];
+}
 
 -(void)showSettings:(UIButton *)sender
 {
@@ -108,13 +121,16 @@
 
 -(void)refresh:(UIButton *)sender
 {
+    // how to do this method correctly without clearing table???
+    _clearTable = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateTable];
+    });
+    _clearTable = NO;
+    
     [[NewsHelper sharedInstance] clearNews];
     _pageCount = 1;
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self updateTable];
-//    });
 }
 
 
@@ -142,15 +158,29 @@
     NSLog(@"Error %@; %@", error, [error localizedDescription]);
 }
 
+- (void)LoadMoreNews:(id)sender {
+    //[_activityIndicator startAnimating];
+    _pageCount++;
+    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateTable];
+        //[_activityIndicator stopAnimating];
+    });
+    NSLog(@"loading more");
+
+    
+}
 
 #pragma mark - Table View
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if(_clearTable) return 0;
     return [[NewsHelper sharedInstance] getNewsByCity:[self getSelectedCities][section]].count;
 }
 
 
+/*
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if([[NewsHelper sharedInstance] allNews].count != 0) {
@@ -166,13 +196,13 @@
             NSLog(@"reload");
         }
     }
-}
+}*/
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     NSArray *newsByCity = [[NewsHelper sharedInstance] getNewsByCity:[self getSelectedCities][indexPath.section]];
+    DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     News *new = newsByCity[indexPath.row];
     [cell.titleTextView setText:new.title];
     NSString *date = [_dateFormatter stringFromDate:new.date];

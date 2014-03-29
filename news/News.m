@@ -19,7 +19,16 @@
 
 -(void)setSummary:(NSString *)summary
 {
-    _summary = [summary stringByReplacingOccurrencesOfString:@"&quot;" withString:@"\""];
+    @try {
+        _summary = [summary stringByReplacingOccurrencesOfString:@"&quot;" withString:@"\""];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception.reason);
+    }
+    @finally {
+        
+        _summary = summary;
+    }
 }
 
 -(void)setCity_id:(NSString *)city_id

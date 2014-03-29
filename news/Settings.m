@@ -99,12 +99,14 @@
 -(void)selectCity:(City *)city
 {
     city.selected = YES;
+    [self saveCities];
 }
 
 
 -(void)unselectCity:(City *)city
 {
     city.selected = NO;
+    [self saveCities];
 }
 
 @end

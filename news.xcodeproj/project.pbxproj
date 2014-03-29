@@ -33,6 +33,7 @@
 		3F93786A18B23E33007F5619 /* Communicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786618B23E33007F5619 /* Communicator.m */; };
 		3F93786B18B23E33007F5619 /* Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786918B23E33007F5619 /* Manager.m */; };
 		3F93786E18B27777007F5619 /* NewsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93786D18B27777007F5619 /* NewsDetailViewController.m */; };
+		3F94CA0C18DF5227000E2BB7 /* DateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94CA0B18DF5227000E2BB7 /* DateCell.m */; };
 		3F95748A18C0C11400A2A4FC /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F95748918C0C11400A2A4FC /* Settings.m */; };
 		3F95DF1518D60BF6000D3463 /* NewsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F95DF1418D60BF5000D3463 /* NewsHelper.m */; };
 		3F96EFF418D59F8A004628E2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F96EFF318D59F8A004628E2 /* CFNetwork.framework */; };
@@ -91,6 +92,8 @@
 		3F93786918B23E33007F5619 /* Manager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Manager.m; sourceTree = "<group>"; };
 		3F93786C18B27777007F5619 /* NewsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsDetailViewController.h; sourceTree = "<group>"; };
 		3F93786D18B27777007F5619 /* NewsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsDetailViewController.m; sourceTree = "<group>"; };
+		3F94CA0A18DF5227000E2BB7 /* DateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateCell.h; sourceTree = "<group>"; };
+		3F94CA0B18DF5227000E2BB7 /* DateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateCell.m; sourceTree = "<group>"; };
 		3F95748818C0C11300A2A4FC /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		3F95748918C0C11400A2A4FC /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		3F95DF1318D60BF5000D3463 /* NewsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsHelper.h; sourceTree = "<group>"; };
@@ -208,6 +211,8 @@
 				3F122C4318AD18950007F073 /* DetailCell.m */,
 				3F90383618BE391C00AC689E /* SettingsCell.h */,
 				3F90383718BE391C00AC689E /* SettingsCell.m */,
+				3F94CA0A18DF5227000E2BB7 /* DateCell.h */,
+				3F94CA0B18DF5227000E2BB7 /* DateCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -354,6 +359,7 @@
 				3F90383818BE391C00AC689E /* SettingsCell.m in Sources */,
 				3F95DF1518D60BF6000D3463 /* NewsHelper.m in Sources */,
 				3F122C3B18AD0E1A0007F073 /* JsonParser.m in Sources */,
+				3F94CA0C18DF5227000E2BB7 /* DateCell.m in Sources */,
 				3F122C3818AD0C9F0007F073 /* City.m in Sources */,
 				3F122C1518AD0AD90007F073 /* ViewController.m in Sources */,
 				3F122C0F18AD0AD90007F073 /* AppDelegate.m in Sources */,

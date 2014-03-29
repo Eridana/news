@@ -31,7 +31,9 @@
         
         for (NSString *key in newsDic) {
             if ([new respondsToSelector:NSSelectorFromString(key)]) {
-                [new setValue:[newsDic valueForKey:key] forKey:key];
+                if([newsDic objectForKey:key] != [NSNull null]) {
+                    [new setValue:[newsDic valueForKey:key] forKey:key];
+                }
             }
         }
         

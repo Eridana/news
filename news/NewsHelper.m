@@ -55,7 +55,7 @@
 
 -(NSArray *)getNewsByCity:(City *)city
 {
-    if(city.selected == NO) return [[NSArray alloc] init];
+    //if(city.selected == NO) return [[NSArray alloc] init];
     NSMutableArray *result = [[NSMutableArray alloc] init];
     for (News *news in [_news copy]) {
         if ([[NSString stringWithFormat:@"%@", news.city_id]
@@ -65,22 +65,5 @@
     }
     return [result copy];
 }
-
-//#pragma mark - ManagerDelegate
-//- (void)didReceiveCities:(NSArray *)cities
-//{
-//    //    [[Settings sharedInstance] initWithCities:cities];
-//    //    [self.tableView reloadData];
-//}
-//
-//- (void)didReceiveNews:(NSArray *)news
-//{
-//    [_news addObjectsFromArray: news];
-//}
-//
-//- (void)fetchingFailedWithError:(NSError *)error
-//{
-//    NSLog(@"Error %@; %@", error, [error localizedDescription]);
-//}
 
 @end
