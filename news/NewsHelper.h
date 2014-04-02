@@ -18,7 +18,7 @@
 + (NewsHelper *)sharedInstance;
 
 -(void)setNews:(NSArray *)news;
--(void)clearNews;
 -(NSArray *)getNewsByCity:(City *)city;
+-(BOOL) containsNews:(News *)news;
 
 @end

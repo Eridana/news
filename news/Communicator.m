@@ -23,8 +23,6 @@
         NSString *urlAsString = [NSString stringWithFormat:@"http://rbcitynews.ru/api/v1/cities/%@/news.json?page=%@", city.city_id, page];
         NSURL *url = [[NSURL alloc] initWithString:urlAsString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        //NSError *error = nil;
-        //NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
         
         // возможно все это нужно делать через NSOperationQueue.
         [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {

@@ -8,12 +8,6 @@
 
 #import "NewsHelper.h"
 
-@interface NewsHelper () //<ManagerDelegate>
-{
-    NSMutableArray * _news;
-}
-@end
-
 @implementation NewsHelper
 
 + (NewsHelper *)sharedInstance
@@ -30,40 +24,38 @@
 {
     self = [super init];
     if (self) {
-        if(!_news) {
-            _news = [[NSMutableArray alloc] init];
-        }
         if(!_allNews)
         {
             _allNews = [[NSMutableArray alloc] init];
         }
-        
     }
     return self;
 }
 
 -(void)setNews:(NSArray *)news
 {
-    [_news addObjectsFromArray: news];
     [_allNews addObjectsFromArray:news];
-}
-
--(void)clearNews
-{
-    [_news removeAllObjects];
 }
 
 -(NSArray *)getNewsByCity:(City *)city
 {
-    //if(city.selected == NO) return [[NSArray alloc] init];
     NSMutableArray *result = [[NSMutableArray alloc] init];
-    for (News *news in [_news copy]) {
+    for (News *news in [_allNews copy]) {
         if ([[NSString stringWithFormat:@"%@", news.city_id]
              isEqualToString:[NSString stringWithFormat:@"%@", city.city_id]]) {
             [result addObject:news];
         }
     }
     return [result copy];
+}
+
+-(BOOL) containsNews:(News *)news
+{
+    if(news && news.news_id) {
+        NSArray *resultsArray = [_allNews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"news_id", news.news_id]];
+        return resultsArray.count > 0;
+    }
+    return NO;
 }
 
 @end

@@ -30,11 +30,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self addButtons];
     [self.view addSubview:_tableView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.navigationController.navigationBar.translucent = NO;
+    [self addPullToRefreshButton];
     
     _clearTable = NO;
     _dateFormatter = [[NSDateFormatter alloc] init];
@@ -55,6 +57,14 @@
 }
 
 
+- (void)addPullToRefreshButton
+{
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+}
+
+
 -(void)addButtons
 {
     UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -63,16 +73,17 @@
     [settingsButton setImage:[UIImage imageNamed:@"_settings_icon_48.png"] forState:UIControlStateNormal];
     UIBarButtonItem *uiSettingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
     
-    UIButton *refreshButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [refreshButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
-    [refreshButton addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventTouchUpInside];
-    [refreshButton setImage:[UIImage imageNamed:@"_refresh_icon_48.png"] forState:UIControlStateNormal];
-    UIBarButtonItem *uiRefreshButton = [[UIBarButtonItem alloc] initWithCustomView:refreshButton];
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:uiSettingsButton, uiRefreshButton, nil];
+    UIButton *reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [reloadButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
+    [reloadButton addTarget:self action:@selector(reload:) forControlEvents:UIControlEventTouchUpInside];
+    [reloadButton setImage:[UIImage imageNamed:@"_refresh_icon_48.png"] forState:UIControlStateNormal];
+    UIBarButtonItem *uiReloadButton = [[UIBarButtonItem alloc] initWithCustomView:reloadButton];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:uiSettingsButton, uiReloadButton, nil];
     
     // add footer view
-    [self addFooterToTableView];
+   [self addFooterToTableView];
 }
+
 
 -(void)addFooterToTableView
 {
@@ -86,6 +97,7 @@
     [footerView addSubview:loadMoreButton];
     [self.tableView setTableFooterView:footerView];
 }
+
 
 -(void)showSettings:(UIButton *)sender
 {
@@ -115,22 +127,32 @@
 
 - (void) updateTable
 {
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+    [   self.tableView reloadData];
+    });
 }
 
 
--(void)refresh:(UIButton *)sender
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", 1]];
+    [self updateTable];
+    [refreshControl endRefreshing];
+}
+
+- (void)reloadTable
 {
-    // how to do this method correctly without clearing table???
     _clearTable = YES;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateTable];
-    });
+    [self updateTable];
     _clearTable = NO;
     
-    [[NewsHelper sharedInstance] clearNews];
+    //[[NewsHelper sharedInstance] clearNews];
     _pageCount = 1;
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+}
+
+-(void)reload:(UIButton *)sender
+{
+    [self reloadTable];
 }
 
 
@@ -146,12 +168,9 @@
     [[NewsHelper sharedInstance] setNews:news];
     [_activityIndicator stopAnimating];
     if(news) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateTable];
-        });
+        [self updateTable];
     }
 }
-
 
 - (void)fetchingFailedWithError:(NSError *)error
 {
@@ -162,13 +181,9 @@
     //[_activityIndicator startAnimating];
     _pageCount++;
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateTable];
-        //[_activityIndicator stopAnimating];
-    });
+    [self updateTable];
+    //[_activityIndicator stopAnimating];
     NSLog(@"loading more");
-
-    
 }
 
 #pragma mark - Table View

@@ -7,7 +7,7 @@
 //
 
 #import "JsonParser.h"
-#import "City.h"
+#import "NewsHelper.h"
 #import "News.h"
 
 @implementation JsonParser
@@ -30,14 +30,19 @@
         News *new = [[News alloc] init];
         
         for (NSString *key in newsDic) {
+            if([key isEqualToString:@"id"]) {
+                [new setValue:[newsDic valueForKey:key] forKey:@"news_id"];
+            }
             if ([new respondsToSelector:NSSelectorFromString(key)]) {
                 if([newsDic objectForKey:key] != [NSNull null]) {
                     [new setValue:[newsDic valueForKey:key] forKey:key];
                 }
             }
         }
-        
-        [news addObject:new];
+        // a lot of time
+        if([[NewsHelper sharedInstance] containsNews:new] == NO) {
+            [news addObject:new];
+        }
     }
     
     return news;

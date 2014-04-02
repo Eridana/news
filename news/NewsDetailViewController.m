@@ -14,6 +14,12 @@
 
 @implementation NewsDetailViewController
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.navigationController.navigationBar.translucent = NO;
+}
+
 -(void) setDetails:(News *)details
 {
     _details = details;
@@ -33,7 +39,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.navigationController.navigationBar.translucent = YES;
     [super viewWillAppear:animated];
     [self updateDetails];
   }

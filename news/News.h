@@ -11,7 +11,7 @@
 
 @interface News : NSObject
 
-//@property (strong, nonatomic) NSString *news_id;
+@property (strong, nonatomic) NSString *news_id;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *description;
 @property (strong, nonatomic) NSString *summary;
