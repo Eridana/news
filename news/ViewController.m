@@ -15,9 +15,11 @@
 #import "Settings.h"
 #import "SettingsViewController.h"
 #import "NewsHelper.h"
+#import "UIView+ActivityIndicator.h"
 
 @interface ViewController () <ManagerDelegate, UITableViewDataSource, UITableViewDelegate> {
     UIActivityIndicatorView *_activityIndicator;
+    UIView *_overlayView;
     Manager *_manager;
     NSDateFormatter *_dateFormatter;
     NSInteger _pageCount;
@@ -30,24 +32,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.navigationBar.translucent = NO;
     
     [self addButtons];
     [self.view addSubview:_tableView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.navigationController.navigationBar.translucent = NO;
     [self addPullToRefreshButton];
+    [self startIndicator];
     
     _clearTable = NO;
-    _dateFormatter = [[NSDateFormatter alloc] init];
-    [_dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
-    
-    _activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    _activityIndicator.center = CGPointMake(self.view.frame.size.width / 2.0, self.view.frame.size.height / 2.0);
-    [self.tableView addSubview: _activityIndicator];
-    
-    [_activityIndicator startAnimating];
-    
     _manager = [[Manager alloc] init];
     _manager.communicator = [[Communicator alloc] init];
     _manager.communicator.delegate = _manager;
@@ -56,10 +50,20 @@
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
 }
 
+-(void)startIndicator
+{
+    [self.navigationController.view showActivityIndicator];
+}
+
+-(void)stopIndicator
+{
+    [self.navigationController.view hideActivityIndicator];
+}
 
 - (void)addPullToRefreshButton
 {
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to refresh"];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
 }
@@ -88,11 +92,10 @@
 -(void)addFooterToTableView
 {
     // separator is dissappearing (ios7 bug)
-    // will need to add activity indicator in footerview
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 2.0, 300.0, 60.0)];
     UIButton *loadMoreButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [loadMoreButton setTitle: @"Загрузить еще новости" forState:UIControlStateNormal];
-    [loadMoreButton addTarget:self action:@selector(LoadMoreNews:) forControlEvents:UIControlEventTouchUpInside];
+    [loadMoreButton addTarget:self action:@selector(loadMoreNews:) forControlEvents:UIControlEventTouchUpInside];
     [loadMoreButton setFrame:CGRectMake(10.0, 2.0, 300.0, 44.0)];
     [footerView addSubview:loadMoreButton];
     [self.tableView setTableFooterView:footerView];
@@ -128,19 +131,22 @@
 - (void) updateTable
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-    [   self.tableView reloadData];
+        [self.tableView reloadData];
     });
 }
 
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
+    [self startIndicator];
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", 1]];
     [self updateTable];
     [refreshControl endRefreshing];
+    [self stopIndicator];
 }
 
 - (void)reloadTable
 {
+    [self startIndicator];
     _clearTable = YES;
     [self updateTable];
     _clearTable = NO;
@@ -148,6 +154,7 @@
     //[[NewsHelper sharedInstance] clearNews];
     _pageCount = 1;
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+    [self stopIndicator];
 }
 
 -(void)reload:(UIButton *)sender
@@ -166,8 +173,9 @@
 - (void)didReceiveNews:(NSArray *)news
 {
     [[NewsHelper sharedInstance] setNews:news];
-    [_activityIndicator stopAnimating];
+    //[_activityIndicator stopAnimating];
     if(news) {
+        [self stopIndicator];
         [self updateTable];
     }
 }
@@ -177,12 +185,12 @@
     NSLog(@"Error %@; %@", error, [error localizedDescription]);
 }
 
-- (void)LoadMoreNews:(id)sender {
-    //[_activityIndicator startAnimating];
+- (void)loadMoreNews:(id)sender {
+    [self startIndicator];
     _pageCount++;
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
     [self updateTable];
-    //[_activityIndicator stopAnimating];
+    [self stopIndicator];
     NSLog(@"loading more");
 }
 
@@ -220,8 +228,7 @@
     DetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     News *new = newsByCity[indexPath.row];
     [cell.titleTextView setText:new.title];
-    NSString *date = [_dateFormatter stringFromDate:new.date];
-    [cell.dateLabel setText:date];
+    [cell.dateLabel setText:new.dateAsString];
     if(new.city) {
         [cell.cityLabel setText:[new.city name]];
     }

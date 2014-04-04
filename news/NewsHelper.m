@@ -24,9 +24,8 @@
 {
     self = [super init];
     if (self) {
-        if(!_allNews)
-        {
-            _allNews = [[NSMutableArray alloc] init];
+        if(!_allNews) {
+            _allNews = [[NSMutableArray alloc] init];            
         }
     }
     return self;

@@ -37,6 +37,7 @@
 		3F95748A18C0C11400A2A4FC /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F95748918C0C11400A2A4FC /* Settings.m */; };
 		3F95DF1518D60BF6000D3463 /* NewsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F95DF1418D60BF5000D3463 /* NewsHelper.m */; };
 		3F96EFF418D59F8A004628E2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F96EFF318D59F8A004628E2 /* CFNetwork.framework */; };
+		3FA0D2FC18EC7B6D00FBC914 /* UIView+ActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA0D2FB18EC7B6D00FBC914 /* UIView+ActivityIndicator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,8 @@
 		3F95DF1318D60BF5000D3463 /* NewsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsHelper.h; sourceTree = "<group>"; };
 		3F95DF1418D60BF5000D3463 /* NewsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsHelper.m; sourceTree = "<group>"; };
 		3F96EFF318D59F8A004628E2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		3FA0D2FA18EC7B6D00FBC914 /* UIView+ActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ActivityIndicator.h"; sourceTree = "<group>"; };
+		3FA0D2FB18EC7B6D00FBC914 /* UIView+ActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ActivityIndicator.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +252,8 @@
 				3F95748918C0C11400A2A4FC /* Settings.m */,
 				3F95DF1318D60BF5000D3463 /* NewsHelper.h */,
 				3F95DF1418D60BF5000D3463 /* NewsHelper.m */,
+				3FA0D2FA18EC7B6D00FBC914 /* UIView+ActivityIndicator.h */,
+				3FA0D2FB18EC7B6D00FBC914 /* UIView+ActivityIndicator.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -356,6 +361,7 @@
 				3F93786B18B23E33007F5619 /* Manager.m in Sources */,
 				3F93786A18B23E33007F5619 /* Communicator.m in Sources */,
 				3F95748A18C0C11400A2A4FC /* Settings.m in Sources */,
+				3FA0D2FC18EC7B6D00FBC914 /* UIView+ActivityIndicator.m in Sources */,
 				3F90383818BE391C00AC689E /* SettingsCell.m in Sources */,
 				3F95DF1518D60BF6000D3463 /* NewsHelper.m in Sources */,
 				3F122C3B18AD0E1A0007F073 /* JsonParser.m in Sources */,

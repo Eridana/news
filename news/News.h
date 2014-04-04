@@ -20,6 +20,7 @@
 @property (strong, nonatomic) NSString *published_at;
 @property (strong, nonatomic) NSString *legacy_url;
 @property (strong, nonatomic) NSDate *date;
+@property (strong, nonatomic) NSString *dateAsString;
 -(id)init;
 
 @end

@@ -26,7 +26,6 @@
         NSLog(@"%@", exception.reason);
     }
     @finally {
-        
         _summary = summary;
     }
 }
@@ -43,6 +42,12 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
     published_at =[self removeColonFromTimeZoneInDate:published_at];
     _date= [dateFormatter dateFromString:published_at];
+    
+     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"];
+    [dateFormatter setLocale:locale];
+    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    _dateAsString = [dateFormatter stringFromDate:_date];
 }
 
 - (NSString *)removeColonFromTimeZoneInDate:(NSString *)dateAsString {
