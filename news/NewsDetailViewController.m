@@ -25,8 +25,8 @@
     UISwipeGestureRecognizer *upSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(loadNext:)];
     [upSwipeRecognizer setDirection:UISwipeGestureRecognizerDirectionLeft];
     [[self view] addGestureRecognizer:upSwipeRecognizer];
-    // возможно swipe влево должен выходить обратно на первый контроллер, нужно уточнить.
-    UISwipeGestureRecognizer *downSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(loadPrevious:)];
+    // swipe влево должен выходить обратно на первый контроллер
+    UISwipeGestureRecognizer *downSwipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(goToPreviousController:)];
     [downSwipeRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
     [[self view] addGestureRecognizer:downSwipeRecognizer];
     
@@ -74,6 +74,11 @@
     }
 }
 
+-(IBAction)goToPreviousController:(UISwipeGestureRecognizer *)gesture
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(IBAction)loadNext:(UISwipeGestureRecognizer *)gesture
 {
     [self loadNewsForIndex:_currentNewsIndex];
@@ -81,15 +86,6 @@
         _currentNewsIndex = 0;
     }
     _currentNewsIndex++;
-}
-
--(IBAction)loadPrevious:(UISwipeGestureRecognizer *)gesture
-{
-    [self loadNewsForIndex:_currentNewsIndex];
-    if(_currentNewsIndex == 0) {
-        _currentNewsIndex = [_displayNews count] - 1;
-    }
-    _currentNewsIndex--;
 }
     
 -(void)loadNewsForIndex:(NSUInteger)index
