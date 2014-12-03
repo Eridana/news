@@ -33,6 +33,7 @@
 
 -(void)setNews:(NSArray *)news
 {
+    // проверять на повторения
     [_allNews addObjectsFromArray:news];
 }
 
@@ -45,7 +46,7 @@
             [result addObject:news];
         }
     }
-    return [result copy];
+    return result;
 }
 
 -(BOOL) containsNews:(News *)news

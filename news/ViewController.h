@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SettingsViewController.h"
+#import "Manager.h"
 
-@interface ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@interface ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, SettingsDelegate, ManagerDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @end

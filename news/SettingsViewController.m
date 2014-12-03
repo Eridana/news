@@ -13,6 +13,7 @@
 
 @interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate> {
     NSArray *_cities;
+    BOOL _citiedDidChange;
 }
 @end
 
@@ -72,19 +73,24 @@
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;        
         [[Settings sharedInstance] selectCity:city];
+        _citiedDidChange = YES;
     }
     else {
         // список выбранных городов не может быть пустым
         if([[Settings sharedInstance] getSelectedCities].count != 1) {
             cell.accessoryType = UITableViewCellAccessoryNone;
             [[Settings sharedInstance] unselectCity:city];
+            _citiedDidChange = YES;
         }
     }
 }
 
--(void)viewDidAppear
+-(void)viewWillDisappear:(BOOL)animated
 {
-    
+    [super viewWillDisappear:animated];
+    if (_delegate && _citiedDidChange) {
+        [_delegate citiesDidChange];
+    }
 }
 
 @end

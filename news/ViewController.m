@@ -10,20 +10,20 @@
 #import "City.h"
 #import "News.h"
 #import "DetailCell.h"
-#import "Manager.h"
 #import "Communicator.h"
 #import "Settings.h"
-#import "SettingsViewController.h"
 #import "NewsHelper.h"
 #import "UIView+ActivityIndicator.h"
 
-@interface ViewController () <ManagerDelegate, UITableViewDataSource, UITableViewDelegate> {
+@interface ViewController ()
+{
     UIActivityIndicatorView *_activityIndicator;
     UIView *_overlayView;
     Manager *_manager;
     NSDateFormatter *_dateFormatter;
     NSInteger _pageCount;
     BOOL _clearTable;
+    UIView *_footerView;
 }
 @end
 
@@ -47,7 +47,7 @@
     _manager.communicator.delegate = _manager;
     _manager.delegate = self;
     _pageCount = 1;
-    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%ld", (long)_pageCount]];
 }
 
 -(void)startIndicator
@@ -63,7 +63,7 @@
 - (void)addPullToRefreshButton
 {
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to refresh"];
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
 }
@@ -77,12 +77,7 @@
     [settingsButton setImage:[UIImage imageNamed:@"_settings_icon_48.png"] forState:UIControlStateNormal];
     UIBarButtonItem *uiSettingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
     
-    UIButton *reloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [reloadButton setFrame:CGRectMake(10.0, 2.0, 25.0, 25.0)];
-    [reloadButton addTarget:self action:@selector(reload:) forControlEvents:UIControlEventTouchUpInside];
-    [reloadButton setImage:[UIImage imageNamed:@"_refresh_icon_48.png"] forState:UIControlStateNormal];
-    UIBarButtonItem *uiReloadButton = [[UIBarButtonItem alloc] initWithCustomView:reloadButton];
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:uiSettingsButton, uiReloadButton, nil];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:uiSettingsButton, nil];
     
     // add footer view
    [self addFooterToTableView];
@@ -92,19 +87,21 @@
 -(void)addFooterToTableView
 {
     // separator is dissappearing (ios7 bug)
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 2.0, 300.0, 60.0)];
+    _footerView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 2.0, 300.0, 60.0)];
     UIButton *loadMoreButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [loadMoreButton setTitle: @"Загрузить еще новости" forState:UIControlStateNormal];
     [loadMoreButton addTarget:self action:@selector(loadMoreNews:) forControlEvents:UIControlEventTouchUpInside];
     [loadMoreButton setFrame:CGRectMake(10.0, 2.0, 300.0, 44.0)];
-    [footerView addSubview:loadMoreButton];
-    [self.tableView setTableFooterView:footerView];
+    [_footerView addSubview:loadMoreButton];
+    _footerView.hidden = YES;
+    [self.tableView setTableFooterView:_footerView];
 }
 
 
 -(void)showSettings:(UIButton *)sender
 {
     SettingsViewController *settingsController = [self.storyboard instantiateViewControllerWithIdentifier:@"settingsViewController"];
+    settingsController.delegate = self;
     [self.navigationController pushViewController:settingsController animated:YES];
 }
 
@@ -117,7 +114,7 @@
         if (indexPath) {
             if ([segue.identifier isEqualToString:@"showDetails"]) {
                 if ([segue.destinationViewController respondsToSelector:@selector(setDetails:)]) {
-                    id cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                    //id cell = [self.tableView cellForRowAtIndexPath:indexPath];
                     NSArray *newsByCity = [[NewsHelper sharedInstance] getNewsByCity:[self getSelectedCities][indexPath.section]];
                     [segue.destinationViewController performSelector:@selector(setDetails:)
                                                           withObject:newsByCity[indexPath.row]];
@@ -139,9 +136,9 @@
 - (void)refresh:(UIRefreshControl *)refreshControl {
     [self startIndicator];
     [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", 1]];
-    [self updateTable];
     [refreshControl endRefreshing];
     [self stopIndicator];
+    [self updateTable];
 }
 
 - (void)reloadTable
@@ -153,8 +150,8 @@
     
     //[[NewsHelper sharedInstance] clearNews];
     _pageCount = 1;
-    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
-    [self stopIndicator];
+    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%ld", (long)_pageCount]];
+    //[self stopIndicator];
 }
 
 -(void)reload:(UIButton *)sender
@@ -177,6 +174,7 @@
     if(news) {
         [self stopIndicator];
         [self updateTable];
+        _footerView.hidden = NO;
     }
 }
 
@@ -188,7 +186,7 @@
 - (void)loadMoreNews:(id)sender {
     [self startIndicator];
     _pageCount++;
-    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%d", _pageCount]];
+    [_manager fetchNewsByCitiesAndPage: [self getSelectedCities] atPage:[NSString stringWithFormat:@"%ld", (long)_pageCount]];
     [self updateTable];
     [self stopIndicator];
     NSLog(@"loading more");
@@ -201,7 +199,6 @@
     if(_clearTable) return 0;
     return [[NewsHelper sharedInstance] getNewsByCity:[self getSelectedCities][section]].count;
 }
-
 
 /*
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
@@ -219,8 +216,8 @@
             NSLog(@"reload");
         }
     }
-}*/
-
+}
+*/
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -253,5 +250,13 @@
 {
     return [[self getSelectedCities][section] name];
 }
+
+#pragma mark - SettingsDelegate
+
+- (void)citiesDidChange
+{
+    [self reloadTable];
+}
+
 
 @end
